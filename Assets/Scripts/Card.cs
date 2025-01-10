@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Card : MonoBehaviour
 {
+    [SerializeField] private string _cardName = "Homing Fire";
     [SerializeField] private float _idleScale = 1f;
     [SerializeField] private float _hoverShowScale = 1.1f;
     [SerializeField] private float _hoverShowOffsetY = 0.2f;
@@ -72,7 +73,12 @@ public class Card : MonoBehaviour
 
     void AttackShow()
     {
-        if(_attackShowInProgress)
+        if(!NFTManager.Instance.IsOwningNft(_cardName))
+        {
+            ShortMessagePanel.Instance.Show("You don't have this card.");
+            return;
+        }
+        if (_attackShowInProgress)
         {
             return;
         }
@@ -94,6 +100,7 @@ public class Card : MonoBehaviour
         _attackShowInProgress = false;
         gameObject.SetActive(false);
         Enemy.Instance.Hit();
+        ShortMessagePanel.Instance.Show("You used the card.");
     }
 
 
